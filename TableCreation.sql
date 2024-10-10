@@ -17,7 +17,7 @@ create table Customer(CustID int PRIMARY KEY,
     CustPhone int,
     IsMember BOOLEAN,
     Points int
-); --Create table Customer
+);
 
 create table product (
     productid int primary key,
@@ -25,7 +25,7 @@ create table product (
     price int,
     category varchar(15),
     stockquantity int
-); -- Create Table Product
+);
 
 create table Sales(
     SaleID int PRIMARY KEY,
@@ -37,6 +37,14 @@ create table Sales(
     PointsUsed FLOAT,
     Foreign Key (CustID) REFERENCES Customer(CustID),
     Foreign Key (EmpID) REFERENCES Employee(EmpID) 
-); --Create table Sales
+);
 
-
+create table Items(
+    ItemNumber int,
+    SaleID int,
+    ProductID int,
+    Quantity int,
+    Subtotal int,
+    Foreign Key (SaleID) REFERENCES Sales(SaleID),
+    Foreign Key (ProductID) REFERENCES Product(ProductID)
+);
