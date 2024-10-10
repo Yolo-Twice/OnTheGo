@@ -1,1 +1,1 @@
-create database OnTheGo;
+create database OnTheGo
