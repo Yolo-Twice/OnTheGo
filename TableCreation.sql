@@ -16,3 +16,13 @@ create table product (
     category varchar(15),
     stockquantity int
 ); --create table product
+
+create table employee1(
+    empid int primary key,
+    empname varchar(30),
+    role varchar(15),
+    salary int,
+    empphone int,
+    DateOfJoining date,
+    DateOfBirth date
+); --create table employee
