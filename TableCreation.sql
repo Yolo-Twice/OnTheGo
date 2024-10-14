@@ -7,14 +7,14 @@ create table employee(
     empname varchar(30),
     role varchar(15),
     salary int,
-    empphone int,
+    empphone BIGint,
     DateOfJoining date,
     DateOfBirth date
 ); --create table employee
 create table Customer(CustID int PRIMARY KEY,
     CustName VARCHAR(25),
     CustEmail VARCHAR(25),
-    CustPhone int,
+    CustPhone bigint,
     IsMember BOOLEAN,
     Points int
 );
@@ -33,7 +33,7 @@ create table Sales(
     EmpID int,
     SaleDate DATETIME,
     TotalAmount int,
-    PaymentMethod VARCHAR(10),
+    PaymentMethod VARCHAR(20),
     PointsUsed FLOAT,
     Foreign Key (CustID) REFERENCES Customer(CustID),
     Foreign Key (EmpID) REFERENCES Employee(EmpID) 
@@ -48,3 +48,4 @@ create table Items(
     Foreign Key (SaleID) REFERENCES Sales(SaleID),
     Foreign Key (ProductID) REFERENCES Product(ProductID)
 );
+
