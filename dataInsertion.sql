@@ -1,3 +1,5 @@
+Use OnTheGo;
+
 INSERT INTO employee (empid, empname, role, salary, empphone, DateOfJoining, DateOfBirth) VALUES
 (1, 'Alice Johnson', 'Manager', 75000, 1234567890, '2020-01-15', '1985-06-25'),
 (2, 'Bob Smith', 'Sales Associate', 50000, 2345678901, '2021-03-20', '1990-02-14'),
