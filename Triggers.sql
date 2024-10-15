@@ -49,14 +49,23 @@ update product
     where productid=old.productid;
 end;
 
---trigger that decrements stockquantity after item insertion 
+--trigger that decrements stockquantity after item insertion and also ensures stockquantity validity
 
 create trigger insertitem
 before insert on items
 for each row 
 begin 
+declare stock int;
+select stockquantity into stock from product where productid=new.productid;
+if new.quantity<=stock 
+then
 update product 
     set stockquantity=stockquantity-new.quantity 
     where productid=new.productid;
-end;
 
+
+    else
+    SIGNAL SQLSTATE '45000' 
+    SET MESSAGE_TEXT = 'Not enough stock available';
+    end if;
+    end;
