@@ -48,3 +48,15 @@ update product
     set stockquantity=stockquantity+old.quantity 
     where productid=old.productid;
 end;
+
+--trigger that decrements stockquantity after item insertion 
+
+create trigger insertitem
+before insert on items
+for each row 
+begin 
+update product 
+    set stockquantity=stockquantity-new.quantity 
+    where productid=new.productid;
+end;
+
