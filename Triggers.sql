@@ -1,25 +1,27 @@
-use onthego;
+USE onthego;
 
--- Trigger to Subtract the points in the Customer table after data is inserted into the sales table
-create trigger After_Insert_of_points 
-After insert 
-on sales for each row 
+DELIMITER $$
+
+-- Trigger to subtract points in the Customer table after data is inserted into the Sales table
+CREATE TRIGGER After_Insert_of_points 
+AFTER INSERT 
+ON sales 
+FOR EACH ROW 
 BEGIN
-DECLARE curr_points INT;
-Select points into curr_points from customer where custID=new.custID;
+    DECLARE curr_points INT;
 
-if curr_points >= new.pointsused THEN
-    update customer 
-    set points = points - new.pointsused
-    where custid=new.custid;
-else 
-    signal SQLSTATE '45000'
-    set MESSAGE_TEXT = 'Insufficient points';
-    end if;
-end;
+    SELECT points INTO curr_points FROM customer WHERE custID = NEW.custID;
 
--- triggers for setting points to NULL after update or insert
+    IF curr_points >= NEW.pointsused THEN
+        UPDATE customer 
+        SET points = points - NEW.pointsused
+        WHERE custID = NEW.custID;
+    ELSE 
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Insufficient points';
+    END IF;
+END $$
 
+-- Trigger that sets points to NULL after update if ismember is FALSE
 CREATE TRIGGER updateismember
 BEFORE UPDATE ON customer
 FOR EACH ROW
@@ -27,57 +29,58 @@ BEGIN
     IF NEW.ismember = FALSE THEN
         SET NEW.points = NULL;
     END IF;
-END;
+END $$
 
 CREATE TRIGGER insertismember
-before insert ON customer
+BEFORE INSERT ON customer
 FOR EACH ROW
 BEGIN
     IF NEW.ismember = FALSE THEN
         SET NEW.points = NULL;
     END IF;
-END;
+END $$
 
--- trigger that increments stockquantity after item deletion
+-- Trigger that increments stock quantity after item deletion
+CREATE TRIGGER deleteitem
+BEFORE DELETE ON items
+FOR EACH ROW 
+BEGIN 
+    UPDATE product 
+    SET stockquantity = stockquantity + OLD.quantity 
+    WHERE productid = OLD.productid;
+END $$
 
-create trigger deleteitem
-before delete on items
-for each row 
-begin 
-update product 
-    set stockquantity=stockquantity+old.quantity 
-    where productid=old.productid;
-end;
+-- Trigger that decrements stock quantity after item insertion and checks stock validity
+CREATE TRIGGER insertitem
+BEFORE INSERT ON items
+FOR EACH ROW 
+BEGIN 
+    DECLARE stock INT;
+    SELECT stockquantity INTO stock FROM product WHERE productid = NEW.productid;
 
--- trigger that decrements stockquantity after item insertion and also ensures stockquantity validity
+    IF NEW.quantity <= stock THEN
+        UPDATE product 
+        SET stockquantity = stockquantity - NEW.quantity 
+        WHERE productid = NEW.productid;
+    ELSE
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Not enough stock available';
+    END IF;
+END $$
 
-create trigger insertitem
-before insert on items
-for each row 
-begin 
-declare stock int;
-select stockquantity into stock from product where productid=new.productid;
-if new.quantity<=stock 
-then
-update product 
-    set stockquantity=stockquantity-new.quantity 
-    where productid=new.productid;
-
-
-    else
-    SIGNAL SQLSTATE '45000' 
-    SET MESSAGE_TEXT = 'Not enough stock available';
-    end if;
-    end;
-
-
--- Trigger that sets the subtotal of the item row by multiplying quantiy by the price which is taken from product table
--- To make use of it, while inseting either insert only in the first 4 columns or write null in the fifth column 
-create trigger beforeInsertionUpdateSubtotal
-before insert 
-on Items for each row
+-- Trigger that sets the subtotal of the item row
+CREATE TRIGGER beforeInsertionUpdateSubtotal
+BEFORE INSERT 
+ON items 
+FOR EACH ROW
 BEGIN
-    declare priceOfItem int;
-    select price into priceOfItem from product where productid=new.productid;
-    set new.Subtotal=new.quantity*priceOfItem;
-end;
+    DECLARE priceOfItem INT;
+    SELECT price INTO priceOfItem FROM product WHERE productid = NEW.productid;
+
+    IF priceOfItem IS NOT NULL THEN
+        SET NEW.Subtotal = NEW.quantity * priceOfItem;
+    ELSE
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Product price not found';
+    END IF;
+END $$
+
+DELIMITER ;
