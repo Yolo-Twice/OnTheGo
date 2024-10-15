@@ -69,3 +69,15 @@ update product
     SET MESSAGE_TEXT = 'Not enough stock available';
     end if;
     end;
+
+
+--Trigger that sets the subtotal of the item row by multiplying quantiy by the price which is taken from product table
+--To make use of it, while inseting either insert only in the first 4 columns or write null in the fifth column 
+create trigger beforeInsertionUpdateSubtotal
+before insert 
+on Items for each row
+BEGIN
+    declare priceOfItem int;
+    select price into priceOfItem from product where productid=new.productid;
+    set new.Subtotal=new.quantity*priceOfItem;
+end;
