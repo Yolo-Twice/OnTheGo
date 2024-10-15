@@ -1,6 +1,6 @@
 use onthego;
 
---Trigger to Subtract the points in the Customer table after data is inserted into the sales table
+-- Trigger to Subtract the points in the Customer table after data is inserted into the sales table
 create trigger After_Insert_of_points 
 After insert 
 on sales for each row 
@@ -18,7 +18,7 @@ else
     end if;
 end;
 
---triggers for setting points to NULL after update or insert
+-- triggers for setting points to NULL after update or insert
 
 CREATE TRIGGER updateismember
 BEFORE UPDATE ON customer
@@ -38,7 +38,7 @@ BEGIN
     END IF;
 END;
 
---trigger that increments stockquantity after item deletion
+-- trigger that increments stockquantity after item deletion
 
 create trigger deleteitem
 before delete on items
@@ -49,7 +49,7 @@ update product
     where productid=old.productid;
 end;
 
---trigger that decrements stockquantity after item insertion and also ensures stockquantity validity
+-- trigger that decrements stockquantity after item insertion and also ensures stockquantity validity
 
 create trigger insertitem
 before insert on items
@@ -71,8 +71,8 @@ update product
     end;
 
 
---Trigger that sets the subtotal of the item row by multiplying quantiy by the price which is taken from product table
---To make use of it, while inseting either insert only in the first 4 columns or write null in the fifth column 
+-- Trigger that sets the subtotal of the item row by multiplying quantiy by the price which is taken from product table
+-- To make use of it, while inseting either insert only in the first 4 columns or write null in the fifth column 
 create trigger beforeInsertionUpdateSubtotal
 before insert 
 on Items for each row
