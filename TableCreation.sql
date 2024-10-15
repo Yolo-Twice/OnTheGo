@@ -10,7 +10,7 @@ create table employee(
     empphone BIGint,
     DateOfJoining date,
     DateOfBirth date
-); --create table employee
+);
 create table Customer(CustID int PRIMARY KEY,
     CustName VARCHAR(25),
     CustEmail VARCHAR(25),
