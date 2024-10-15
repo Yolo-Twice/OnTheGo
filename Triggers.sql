@@ -37,3 +37,14 @@ BEGIN
         SET NEW.points = NULL;
     END IF;
 END;
+
+--trigger that increments stockquantity after item deletion
+
+create trigger deleteitem
+before delete on items
+for each row 
+begin 
+update product 
+    set stockquantity=stockquantity+old.quantity 
+    where productid=old.productid;
+end;
