@@ -3,7 +3,7 @@ create database OnTheGo;
 use OnTheGo;
 
 create table employee(
-    empid int primary key,
+    empid int primary key AUTO_INCREMENT,
     empname varchar(30),
     role varchar(15),
     salary int,
@@ -11,7 +11,7 @@ create table employee(
     DateOfJoining date,
     DateOfBirth date
 );
-create table Customer(CustID int PRIMARY KEY,
+create table Customer(CustID int PRIMARY KEY AUTO_INCREMENT,
     CustName VARCHAR(25),
     CustEmail VARCHAR(25),
     CustPhone bigint,
@@ -20,7 +20,7 @@ create table Customer(CustID int PRIMARY KEY,
 );
 
 create table product (
-    productid int primary key,
+    productid int primary key AUTO_INCREMENT,
     name varchar(50),
     price int,
     category varchar(15),
@@ -28,7 +28,7 @@ create table product (
 );
 
 create table Sales(
-    SaleID int PRIMARY KEY,
+    SaleID int PRIMARY KEY AUTO_INCREMENT,
     CustID int,
     EmpID int,
     SaleDate DATETIME,
@@ -40,7 +40,7 @@ create table Sales(
 );
 
 create table Items(
-    ItemNumber int,
+    ItemNumber int AUTO_INCREMENT,
     SaleID int,
     ProductID int,
     Quantity int,
