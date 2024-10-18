@@ -40,7 +40,6 @@ create table Sales(
 );
 
 create table Items(
-    ItemNumber int AUTO_INCREMENT,
     SaleID int,
     ProductID int,
     Quantity int,
