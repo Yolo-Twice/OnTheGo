@@ -3,7 +3,7 @@ USE onthego;
 DELIMITER $$
 
 -- Trigger to subtract points in the Customer table after data is inserted into the Sales table
-CREATE TRIGGER After_Insert_of_points 
+CREATE TRIGGER AfterInsertOfPoints 
 AFTER INSERT 
 ON sales 
 FOR EACH ROW 
@@ -82,5 +82,26 @@ BEGIN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Product price not found';
     END IF;
 END $$
+
+-- Trigger to calculate the total of sales using the items table
+
+CREATE TRIGGER AfterInsertUpdateTotalAmount
+AFTER INSERT ON Items
+FOR EACH ROW
+BEGIN
+    -- Declare a variable to store the calculated total
+    DECLARE total INT;
+
+    -- Calculate the total of all subtotals for the given SaleID
+    SELECT SUM(Subtotal)
+    INTO total
+    FROM Items
+    WHERE SaleID = NEW.SaleID;
+
+    -- Update the TotalAmount in the Sales table with the calculated total
+    UPDATE Sales
+    SET TotalAmount = total
+    WHERE SaleID = NEW.SaleID;
+END$$
 
 DELIMITER ;
