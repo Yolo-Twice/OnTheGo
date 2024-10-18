@@ -89,19 +89,17 @@ CREATE TRIGGER AfterInsertUpdateTotalAmount
 AFTER INSERT ON Items
 FOR EACH ROW
 BEGIN
-    -- Declare a variable to store the calculated total
     DECLARE total INT;
 
-    -- Calculate the total of all subtotals for the given SaleID
     SELECT SUM(Subtotal)
     INTO total
     FROM Items
     WHERE SaleID = NEW.SaleID;
 
-    -- Update the TotalAmount in the Sales table with the calculated total
     UPDATE Sales
     SET TotalAmount = total
     WHERE SaleID = NEW.SaleID;
 END$$
+
 
 DELIMITER ;
