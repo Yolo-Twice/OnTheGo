@@ -23,9 +23,9 @@ INSERT INTO Sales (SaleID, CustID, EmpID, SaleDate, TotalAmount, PaymentMethod, 
 (2, 3, 1, '2023-10-05 14:00:00', 800, 'Cash', 20),
 (3, 2, 4, '2023-10-10 16:45:00', 150, 'Debit Card', 0);
 
-INSERT INTO Items (ItemNumber, SaleID, ProductID, Quantity, Subtotal) VALUES
-(1, 1, 1, 1, 1200),
-(2, 1, 4, 10, 50),
-(3, 2, 2, 1, 800),
-(4, 3, 3, 1, 150);
+INSERT INTO Items (SaleID, ProductID, Quantity, Subtotal) VALUES
+(1, 1, 1, 1200),
+(1, 4, 10, 50),
+(2, 2, 1, 800),
+(3, 3, 1, 150);
 
