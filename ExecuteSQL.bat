@@ -14,8 +14,8 @@ set SQL_FILE3=".\Triggers.sql"
 
 :: Execute the SQL files
 mysql -u %MYSQL_USER% -p%MYSQL_PASSWORD% -e "source %SQL_FILE1%"
-mysql -u %MYSQL_USER% -p%MYSQL_PASSWORD% -e "source %SQL_FILE2%"
 mysql -u %MYSQL_USER% -p%MYSQL_PASSWORD% -e "source %SQL_FILE3%"
+mysql -u %MYSQL_USER% -p%MYSQL_PASSWORD% -e "source %SQL_FILE2%"
 
 echo SQL files executed successfully.
 
