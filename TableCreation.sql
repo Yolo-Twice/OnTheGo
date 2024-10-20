@@ -5,7 +5,7 @@ use OnTheGo;
 create table employee(
     empid int primary key AUTO_INCREMENT,
     empname varchar(30),
-    role varchar(15),
+    role varchar(30),
     salary int,
     empphone BIGint,
     DateOfJoining date,
@@ -13,7 +13,7 @@ create table employee(
 );
 create table Customer(CustID int PRIMARY KEY AUTO_INCREMENT,
     CustName VARCHAR(25),
-    CustEmail VARCHAR(25),
+    CustEmail VARCHAR(50),
     CustPhone bigint,
     IsMember BOOLEAN,
     Points int
