@@ -9,15 +9,17 @@ ON sales
 FOR EACH ROW 
 BEGIN
     DECLARE curr_points INT;
-
     SELECT points INTO curr_points FROM customer WHERE custID = NEW.custID;
+    IF NEW.pointsused > 0 THEN
 
-    IF curr_points >= NEW.pointsused THEN
-        UPDATE customer 
-        SET points = points - NEW.pointsused
-        WHERE custID = NEW.custID;
-    ELSE 
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Insufficient points';
+        IF curr_points >= NEW.pointsused THEN
+            UPDATE customer 
+            SET points = points - NEW.pointsused
+            WHERE custID = NEW.custID;
+        ELSE 
+            SIGNAL SQLSTATE '45000' 
+            SET MESSAGE_TEXT = 'Insufficient points';
+        END IF;
     END IF;
 END $$
 
@@ -90,14 +92,17 @@ AFTER INSERT ON Items
 FOR EACH ROW
 BEGIN
     DECLARE total INT;
+    DECLARE discount INT;
 
     SELECT SUM(Subtotal)
     INTO total
     FROM Items
     WHERE SaleID = NEW.SaleID;
 
+    SELECT PointsUsed into discount from sales s WHERE s.SaleID = NEW.SaleID;
+
     UPDATE Sales
-    SET TotalAmount = total
+    SET TotalAmount = total - discount
     WHERE SaleID = NEW.SaleID;
 END$$
 
